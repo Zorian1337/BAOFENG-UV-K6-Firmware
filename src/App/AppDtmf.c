@@ -25,7 +25,7 @@ const DTMFCODESTRUCT DTMFCODE[] =
     {0X3A7A,   0},         //  1450 18
 };
 
-//发射单音
+// Transmit single tone
 const U8  SingalTone[] = 
 {
     100,
@@ -34,11 +34,11 @@ const U8  SingalTone[] =
     210
 };
 
-// 分隔符列表
+// Separator list
 const U8  TblSeprator[] = {
     DTMF_ID_A, DTMF_ID_B, DTMF_ID_C, DTMF_ID_D, DTMF_ID_STAR, DTMF_ID_POUND,
 };
-// 组呼符列表
+// Group call symbol list
 const U8  TblGroupCall[] = {
     0XFF, DTMF_ID_A, DTMF_ID_B, DTMF_ID_C, DTMF_ID_D, DTMF_ID_STAR, DTMF_ID_POUND,
 };
@@ -54,13 +54,13 @@ extern void EnterDtmfEditMode(void)
         return;
     }
     BeepOut(BEEP_FASTSW);
-    //需要关闭双守候，避免出错
+    // Disable dual standby to avoid errors
     DualStandbyWorkOFF();
     g_sysRunPara.sysRunMode = MODE_DTMF;
 
     ResetInputBuf();
 
-    //显示DTMF输入界面
+    // Display the DTMF entry screen
     DisplayDtmfEditHome();
 }
 
@@ -94,7 +94,7 @@ extern void GetDtmfEditCode(void)
     DisplayRadioHome();
 
     if(g_inputbuf.len == 0)
-    {//无输入时，直接退出该模式
+    {// No input; exit the mode directly
         g_sysRunPara.sysRunMode = MODE_MAIN;
         return; 
     }
@@ -121,7 +121,7 @@ extern void GetDtmfEditCode(void)
             g_sysRunPara.txDtmfCode.code[i] = g_inputbuf.buf[i] &0x0f;
         }
     }
-    //获取到DTMF发码后，切换为正常模式
+    // After obtaining the DTMF transmit code, switch back to normal mode
     g_sysRunPara.sysRunMode = MODE_MAIN;
 }
 
@@ -137,7 +137,7 @@ extern void ExitDtmfEditMode(void)
     BeepOut(BEEP_EXITMENU);
     
     ResetInputBuf();
-    //需要恢复双守候功能
+    // Restore dual standby function
     DualStandbyWorkOFF();
     DisplayHomePage();
 }
@@ -180,13 +180,13 @@ extern void KeyProcess_DtmfInput(U8 keyEvent)
             InputDtmfCode('#');
             break;         
 
-        case KEYID_SIDEKEY1: //退格键
+        case KEYID_SIDEKEY1: // Backspace key
             if(g_inputbuf.len)
             {
                 g_inputbuf.len--;
                 g_inputbuf.time = INPUT_DTMF_TIME_OUT;
                 g_inputbuf.buf[g_inputbuf.len] = 0x00;
-                //显示输入模式
+                // Display input mode
                 DisplayInputDtmf();
                 BeepOut(BEEP_FMSW1);
             }
@@ -237,7 +237,7 @@ extern void DtmfInfoInit(void)
 extern void DtmfSendKeypadCode(U8 code)
 {
     if(code >= 17)
-    {// 单音
+    {// Single tone
         Rfic_TxSingleTone_On(1);
     }
     else
@@ -368,7 +368,7 @@ extern void DtmfSendCodeOn(U8  type)
     {
         SpiFlash_ReadBytes(DTMF_CODE_ADDR+g_ChannelVfoInfo.chVfoInfo[g_ChannelVfoInfo.switchAB].dtmfgroup*0x10,dtmfInfo.code, 5);
  
-        //判断编码是否存在
+        // Check whether the code exists
         if(dtmfInfo.code[0] == 0xff)
         {
             return;
@@ -415,7 +415,7 @@ extern void DtmfSendCodeOn(U8  type)
                 memcpy((U8  *)&dtmfInfo.code[0],(U8  *)&dtmfInfo.offlineCode,16);
             }
             
-            //判断编码是否存在
+            // Check whether the code exists
             if(dtmfInfo.code[0] == 0xff)
             {
                 return;
@@ -434,7 +434,7 @@ extern void DtmfSendCodeOn(U8  type)
             memcpy((U8  *)&dtmfInfo.code[4],(U8  *)&g_dtmfStore.machineId[0],DTMF_ANI_LEN);
             dtmfInfo.code[7] = 0XFF;
             
-            //判断编码是否存在
+            // Check whether the code exists
             if(dtmfInfo.code[0] == 0xff)
             {
                 return;
@@ -451,7 +451,7 @@ extern void DtmfSendCodeOn(U8  type)
 void DtmfReceiveSetup(void)
 {
     if(g_sysRunPara.sysRunMode == MODE_WEATHER)
-    {//天气预报模式不解DTMF
+    {// Weather mode does not decode DTMF
         return;
     }
 
@@ -523,7 +523,7 @@ U8  DtmfGetMatchStatue(void)
 void DtmfAnalyseFunc(void)
 {
     U8  i;
-    U8  indexSymbolStar[5] = {0}; //*号标志
+    U8  indexSymbolStar[5] = {0}; //* marker
     U8  countSymbolStar = 0;
     
     if( dtmfInfo.cntRxDtmf < 3 )
@@ -532,7 +532,7 @@ void DtmfAnalyseFunc(void)
         return;
     }
 
-    //    组呼: 组号+**    全呼: *+#
+    //    Group call: group number + **    All call: *+#
     for(i = 0; i < dtmfInfo.cntRxDtmf; i++)
     {
         if(dtmfInfo.code[i] == TblSeprator[g_dtmfStore.separator])
@@ -550,11 +550,11 @@ void DtmfAnalyseFunc(void)
         return;
     }
 
-    // 解析呼叫类型
+    // Parse call type
     if(countSymbolStar > 0)
     {
         if(indexSymbolStar[0] == 3 && dtmfInfo.cntRxDtmf == 7)
-        {// 连接符号 表示呼叫
+        {// The separator indicates a call
             for(i = 0; i < 3; i++)
             {
                 dtmfInfo.callCode[i] = dtmfInfo.code[i];
@@ -592,13 +592,13 @@ void DtmfAnalyseFunc(void)
 }
 
 /**************************************************************************************
-* 函 数 名: DtmfReceiveTask
-* 功能描述: DTMF 解码任务
-* 全局变量: 
-* 输入参数：
-* 输出参数:
-* 返　　回:
-* 说    明：2019.09.05 zjr  v1.0  
+* Function name: DtmfReceiveTask
+* Function description: DTMF decode task
+* Global variables:
+* Input parameters:
+* Output parameters:
+* Return value:
+* Notes: 2019.09.05 zjr  v1.0
 **************************************************************************************/
 extern void DtmfReceiveTask(void)
 {  	
@@ -619,7 +619,7 @@ extern void DtmfReceiveTask(void)
     {
         dtmfInfo.code[dtmfInfo.cntRxDtmf++] = Rfic_ReadDTMF();
       
-        // 大于等于6位或者接收到#号，表示该DTMF段接收结束
+        // If 6 or more digits are received, or the # key is received, this DTMF segment is considered complete
         dtmfInfo.timeRxOut = 4; // 400ms
         if( dtmfInfo.cntRxDtmf >= 16)
         {

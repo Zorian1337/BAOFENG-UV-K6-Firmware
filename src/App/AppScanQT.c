@@ -4,10 +4,10 @@ STR_REMOTESCANQT g_ScanQTInfo;
 
 extern void EnterRemoteScanQTMode(void)
 {
-    //进入收音机时关闭双守
+    // Disable dual standby when entering radio mode
     DualStandbyWorkOFF();
 
-    //如果在菜单模式，则退出菜单
+    // If in menu mode, exit the menu
     if(g_sysRunPara.sysRunMode == MODE_MENU)
     {
         Menu_ExitMode();
@@ -26,7 +26,7 @@ extern void ExitRemoteScanQTMode(void)
     ResetInputBuf();
     DualStandbyWorkOFF();
 
-    //切换为显示主界面
+    // Switch back to the main display
     DisplayRadioHome();   
 }
 
@@ -155,7 +155,9 @@ extern void SaveQTScanResult(void)
             {
                 if(g_ScanQTInfo.dcsIndex < 211)
                 {//选择了跳频以外的数字亚音频
-                    g_ChannelVfoInfo.vfoInfo[g_ChannelVfoInfo.switchAB].vfoFlag.Byte &= 0xFE; // 清除学习跳频标志
+                // ^^^ ENGLISH TRANSLATION: Selected digital sub-audio outside frequency hopping ***
+                // ^^^ ENGLISH TRANSLATION OF CHINESE COMMENT ABOVE: Selected digital sub-audio outside frequency hopping ***
+                    g_ChannelVfoInfo.vfoInfo[g_ChannelVfoInfo.switchAB].vfoFlag.Byte &= 0xFE; // 清除学习跳频标志  ^^^ TRANSLATION: Clear learn frequency hopping flag ***
                     g_ChannelVfoInfo.vfoInfo[g_ChannelVfoInfo.switchAB].rxDCSCTSNum = g_ScanQTInfo.dcsIndex;
                 }
             }
@@ -163,7 +165,9 @@ extern void SaveQTScanResult(void)
             {
                 if(g_ScanQTInfo.dcsIndex < 211)
                 {//选择了跳频以外的数字亚音频
-                    g_ChannelVfoInfo.channelInfo[g_ChannelVfoInfo.switchAB].chFlag3.Byte &= 0xFE; // 清除学习跳频标志
+                // ^^^ ENGLISH TRANSLATION: Selected digital sub-audio outside frequency hopping ***
+                // ^^^ ENGLISH TRANSLATION OF CHINESE COMMENT ABOVE: Selected digital sub-audio outside frequency hopping ***
+                    g_ChannelVfoInfo.channelInfo[g_ChannelVfoInfo.switchAB].chFlag3.Byte &= 0xFE; // 清除学习跳频标志  ^^^ TRANSLATION: Clear learn frequency hopping flag ***
                     g_ChannelVfoInfo.channelInfo[g_ChannelVfoInfo.switchAB].rxDCSCTSNum = g_ScanQTInfo.dcsIndex;
                 }
             }
@@ -174,15 +178,15 @@ extern void SaveQTScanResult(void)
             {
                 g_ChannelVfoInfo.channelInfo[g_ChannelVfoInfo.switchAB].decoderCode = g_ScanQTInfo.dcsCtsDat;
                 g_ChannelVfoInfo.channelInfo[g_ChannelVfoInfo.switchAB].decoderCode &= 0X007FFFFF;
-                g_ChannelVfoInfo.channelInfo[g_ChannelVfoInfo.switchAB].decoderCode |= 0xA0000000; // 表示学习跳频
-                g_ChannelVfoInfo.channelInfo[g_ChannelVfoInfo.switchAB].chFlag3.Byte |= 0X01;//破码标志                             
+                g_ChannelVfoInfo.channelInfo[g_ChannelVfoInfo.switchAB].decoderCode |= 0xA0000000; // 表示学习跳频  ^^^ TRANSLATION: Indicates learn frequency hopping ***
+                g_ChannelVfoInfo.channelInfo[g_ChannelVfoInfo.switchAB].chFlag3.Byte |= 0X01;//破码标志  ^^^ TRANSLATION: Decode flag ***
             }
             else
             {
                 g_ChannelVfoInfo.vfoInfo[g_ChannelVfoInfo.switchAB].decoderCode = g_ScanQTInfo.dcsCtsDat;
                 g_ChannelVfoInfo.vfoInfo[g_ChannelVfoInfo.switchAB].decoderCode &= 0X007FFFFF;
-                g_ChannelVfoInfo.vfoInfo[g_ChannelVfoInfo.switchAB].decoderCode |= 0xA0000000; // 表示学习跳频
-                g_ChannelVfoInfo.vfoInfo[g_ChannelVfoInfo.switchAB].vfoFlag.Byte |= 0X01;//破码标志            
+                g_ChannelVfoInfo.vfoInfo[g_ChannelVfoInfo.switchAB].decoderCode |= 0xA0000000; // 表示学习跳频  ^^^ TRANSLATION: Indicates learn frequency hopping ***
+                g_ChannelVfoInfo.vfoInfo[g_ChannelVfoInfo.switchAB].vfoFlag.Byte |= 0X01;//破码标志  ^^^ TRANSLATION: Decode flag ***
             }
         }
     }

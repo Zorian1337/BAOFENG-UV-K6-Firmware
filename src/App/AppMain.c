@@ -190,7 +190,7 @@ extern void Main_KeyDownFun(U8 flag)
 extern void Main_Backspace(void)
 {
     if(g_ChannelVfoInfo.chVfoInfo[g_ChannelVfoInfo.switchAB].chVfoMode == VFO_MODE)
-    {//频率模式下有输入字符时作为退格使用
+    {// In VFO mode, input characters are used as backspace when present
         if(g_inputbuf.len)
         {
             g_inputbuf.len--;
@@ -199,13 +199,13 @@ extern void Main_Backspace(void)
             if(g_inputbuf.len)
             {
                g_inputbuf.time = INPUT_TIME_OUT;
-                //显示输入模式
+                // Display input mode
                 DisplayInputVfoFreq();
                 BeepOut(BEEP_NULL);
             }
             else
             {
-                DualStandbyWorkOFF();   //临时关闭双守保证显示信息正确
+                DualStandbyWorkOFF();   // Temporarily disable dual standby to keep the display information accurate
                 DisplayRadioHome();
                 BeepOut(BEEP_FMSW1);
             }
@@ -218,7 +218,7 @@ extern void Main_Backspace(void)
     }
     else
     {
-        //信道模式下退格
+        // Backspace in channel mode
         if(g_inputbuf.len)
         {
             g_inputbuf.len--;
@@ -227,13 +227,13 @@ extern void Main_Backspace(void)
             if(g_inputbuf.len)
             {
                g_inputbuf.time = INPUT_TIME_OUT;
-                //显示输入模式
+                // Display input mode
                 DisplayInputChNum();
                 BeepOut(BEEP_NULL);
             }
             else
             {
-                DualStandbyWorkOFF();   //临时关闭双守保证显示信息正确
+                DualStandbyWorkOFF();   // Temporarily disable dual standby to keep the display information accurate
                 DisplayRadioHome();
                 BeepOut(BEEP_FMSW1);
             }

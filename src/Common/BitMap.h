@@ -2,7 +2,7 @@
     #define __BITMAP_H__
 
 /**************************************************************************/
-//定义状态标志图标以及图标大小
+// Define the status icon sizes and associated bitmap dimensions
 #define ICON_BATT_SIZEX           17
 #define ICON_BATT_SIZEY           7
 extern const U8 iconBattEmpty[];

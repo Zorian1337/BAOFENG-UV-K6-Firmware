@@ -39,9 +39,9 @@ typedef enum
 /********************************************************************************************/
 typedef struct
 {
-    ENUM_BEEPMODE beepMode;      //Tone音模式
-    U8 beepCnt;                  //需要发出的Tone音频种类
-    U16 beepTime;                 //Tone音时间
+    ENUM_BEEPMODE beepMode;      // Tone mode
+    U8 beepCnt;                  // Number of tone types to emit
+    U16 beepTime;                 // Tone duration
 }STR_BEEP;
 
 extern volatile STR_BEEP beepDat;

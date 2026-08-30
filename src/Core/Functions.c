@@ -41,10 +41,10 @@ extern void ExitAllFunction(U8 flag)
 extern void CheckAutoKeyLockTask(void)
 {
     if(g_radioInform.keyAutoLock)
-    {//自动键盘锁开启
+    {// Automatic keyboard lock enabled
         if(g_sysRunPara.sysRunMode == MODE_MENU || g_sysRunPara.sysRunMode == MODE_SEARCH || g_sysRunPara.sysRunMode == MODE_STOPWATCH)
         {
-            //菜单模式下，键盘不自动锁定
+            // In menu mode, the keyboard is not auto-locked
             return;
         }
     
@@ -126,7 +126,7 @@ extern void VoxSwitchOnOff(void)
     {
         g_radioInform.voxSwitch = 0;
     }
-    //更新系统图标
+    // Update system icons
     DisplayStateBar();
     BeepOut(BEEP_FMSW1);
 }
@@ -137,42 +137,42 @@ extern void VoxCheckTask(void)
     //String disbuf[16]={0};
 
     if(g_radioInform.voxSwitch == 0)
-    {//声控功能未开启
+    {// VOX function not enabled
         return;
     }  
 
     if(g_rfRxState == WAIT_RXEND || (g_rfState == RF_RX && g_sysRunPara.rfRxFlag.rxReceived == ON))
-    {//接收状态下不声控
-        g_sysRunPara.rfTxFlag.voxDetDly = 15;//1.5S
+    {// No VOX while receiving
+        g_sysRunPara.rfTxFlag.voxDetDly = 15;// 1.5 s
         return;
     }
 
     if(Audio_CheckBusy() || alarmDat.alarmStates || g_sysRunPara.sysRunMode >= MODE_MENU )
     {
-        g_sysRunPara.rfTxFlag.voxDetDly = 15;//1.5S
+        g_sysRunPara.rfTxFlag.voxDetDly = 15;// 1.5 s
         return;
     }
 
     if(g_sysRunPara.rfTxFlag.voxDetDly)
-    {//用于延时声控检测，在声音播放完成后消除抖动使用
+    {// Used to delay VOX detection and suppress jitter after voice playback ends
         return;
     }
     voxData = UserADC_GetValOfVox();
     voxLevel = VOX_TH[g_radioInform.voxLevel+1];
 
     if(g_rfState == RF_TX)
-    {//开启声控发射后，停止的值需要小1.2mv左右
+    {// After VOX transmission starts, the stop threshold should be about 1.2 mV lower
         voxLevel -= VOX_OFF_DIFF;
     }
     if(voxData > voxLevel)
     {	    
-        g_sysRunPara.rfTxFlag.voxWorkDly = 5 + g_radioInform.voxDelay;   //支持0.5S到2S
+        g_sysRunPara.rfTxFlag.voxWorkDly = 5 + g_radioInform.voxDelay;   // Supports 0.5 s to 2 s
 
         if(g_rfState == RF_RX)
         {
             Radio_EnterTxMode();
             if(g_rfState != RF_TX)
-            {//延时避免禁发出错
+            {// Delay to avoid transmission lockout errors
                 g_sysRunPara.rfTxFlag.voxDetDly = 12; 
                 g_sysRunPara.rfTxFlag.voxWorkDly = 0;
             }
@@ -206,7 +206,7 @@ extern void Radio_TxKeyTone(U8 event, U8 para)
     }
 
     if(g_sysRunPara.dtmfToneFlag == 1 && (para == KEYSTATE_RELEASE))
-    {//有播报过按键侧音同时按键释放时，需要关闭按键侧音
+    {// If side-tone playback has occurred and the key is released, close the side-tone
         Rfic_SetDtmfFreq(0,0);
         Rfic_ExitDTMFMode();
         Rfic_TxSingleTone_Off();
@@ -280,7 +280,7 @@ extern void Radio_TxKeyTone(U8 event, U8 para)
                break; 
             case KEYID_SIDEKEY2:
                if(g_radioInform.rtone > 3)
-                {//限制发送1750信令是超出范围
+                {// Limit the transmit 1750 Hz tone to the valid range
                     g_radioInform.rtone = 3;
                 }
                 DtmfSendKeypadCode(g_radioInform.rtone+17);

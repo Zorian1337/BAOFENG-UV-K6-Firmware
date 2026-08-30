@@ -1,6 +1,6 @@
 #include "includes.h"
 
-//定义对讲机参数全局变量
+// Define global radio parameter variables
 STR_RADIOINFORM g_radioInform;
 STR_FMINFOS g_FMInform;
 STR_SYSTEM  g_sysRunPara;

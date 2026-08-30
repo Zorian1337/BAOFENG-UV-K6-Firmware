@@ -88,7 +88,7 @@ extern void FmDisplayFreq(void)
     LCD_ClearArea(35,0,128,16);
     LCD_DisplayText(35,xpos,(U8 *)disBuf,FONTSIZE_16x16,LCD_DIS_NORMAL);
 
-    //显示信道号
+    // Display channel number
     FmDisplayChNum();
 
     LCD_UpdateWorkAre();

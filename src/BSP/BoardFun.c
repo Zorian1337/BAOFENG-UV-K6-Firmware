@@ -12,39 +12,39 @@ extern void CheckPowerOff(void)
         {
             RfOff();
             Rfic_Sleep();
-            //显示关机界面
+            // Display the power-off screen
             if(g_rfState == RF_TX)
             {
                 DelayMs(200);
             }
 
-            //关闭双守才能切回主信道
+            // Turn off dual standby before switching back to the main channel
             DualStandbyWorkOFF();
         
-            //保存设置的数据
+            // Save configured data
             Flash_SaveRadioImfosData();
 
             if(g_ChannelVfoInfo.chVfoInfo[g_ChannelVfoInfo.switchAB].chVfoMode == CHAN_MODE)
             {
-                //保存信道数据/信道名称
+                // Save channel data / channel name
                 Flash_SaveChannelData(g_ChannelVfoInfo.channelNum[g_ChannelVfoInfo.switchAB],(U8 *)&g_ChannelVfoInfo.channelInfo[g_ChannelVfoInfo.switchAB].rxFreq,g_ChannelVfoInfo.chVfoInfo[g_ChannelVfoInfo.switchAB].channelName);
             }
             else
             {
-                //保存频率模式数据
+                // Save frequency mode data
                 Flash_SaveVfoData(g_ChannelVfoInfo.switchAB);
             }
             
-            //保存系统运行数据
+            // Save system runtime data
             Flash_SaveSystemRunData();
         
-            //延时100ms等待数据写完
+            // Delay 100 ms to wait for data write completion
             DelayMs(100);
             POWER_OFF;
 
-            //延时后确保关机
+            // Delay to ensure shutdown
             DelayMs(500);
-            //复位系统,避免关机后立马开机
+            // Reset the system to avoid immediate power-on after shutdown
             NVIC_SystemReset();
         }
     }
@@ -159,7 +159,7 @@ extern void LightFlashTask(void)
     }
 
     if(alarmDat.alarmStates == ON)
-    {//报警模式下LED也会闪烁
+    {// The LED also flashes in alarm mode
         return;
     }
     LightSwitch(LED_FLASH);
@@ -186,7 +186,7 @@ extern void LCD_BackLightSetOn(void)
 extern void LCD_CheckBackLight(void)
 {
     if(g_radioInform.autoBack == 0)
-    {//常亮
+    {// Always on
         return;
     }
 
@@ -246,7 +246,7 @@ void RF_PowerSet(U8 band,ENUM_RFPWR flag)
     }
     else
     {
-        //关闭所有电源
+        // Turn off all power
         Rfic_GpioSetBit( RF_GPIO2, GPIOx_RFIC_L );
 		Rfic_GpioSetBit( RF_GPIO3, GPIOx_RFIC_L );
 		GPIOA->BRR = GPIO_Pin_14;

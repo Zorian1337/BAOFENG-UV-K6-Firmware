@@ -21,8 +21,8 @@ typedef enum
 
 typedef struct
 {
-    ENUM_SCANSTATE state;                           //扫描状态
-    U8 direction;                               //扫描方向
+    ENUM_SCANSTATE state;                           // Scan state
+    U8 direction;                               // Scan direction
     U16 scanTime;
 }STR_SCAN;
 

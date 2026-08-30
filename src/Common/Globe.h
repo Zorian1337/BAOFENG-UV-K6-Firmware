@@ -6,7 +6,7 @@
 #define FREQ_BAND_UHF           1
 #define FREQ_BAND_200M          2
 #define FREQ_BAND_350M          3
-#define FREQ_BAND_AM            4        //AM频段    
+#define FREQ_BAND_AM            4        // AM band
 /**************************************************************************/
 
 extern STR_RADIOINFORM g_radioInform;

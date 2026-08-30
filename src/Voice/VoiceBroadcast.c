@@ -39,13 +39,13 @@ extern void VoiceOutput_Interrupt(void)
         }
     
         if(g_voiceInform.voicePlay.dmaBufUsed == 1)
-        {//使用缓存B
+        {// Use buffer B
             g_voiceInform.voicePlay.dmaBufUsed = 0;
             g_voiceInform.voicePlay.dmaBufAUseFlag = 1;
             DmaUpdateMemery(DMA1_Channel5,(uint32_t)g_voiceInform.voicePlay.dmaBufB,length);
         }
         else
-        {//使用缓存A
+        {// Use buffer A
             g_voiceInform.voicePlay.dmaBufUsed = 1;
             g_voiceInform.voicePlay.dmaBufBUseFlag = 1;
             DmaUpdateMemery(DMA1_Channel5,(uint32_t)g_voiceInform.voicePlay.dmaBufA,length);
@@ -82,6 +82,7 @@ extern void AudioHard_Init(void)
     DMA_Init(DMA1_Channel5, &DMA_InitStructure);
 
     /*DMA 允许数据传输完成中断*/
+    /* ^^^ ENGLISH TRANSLATION: DMA allow data transfer complete interrupt ****/
     DMA_ITConfig(DMA1_Channel5,DMA_IT_TC,ENABLE);
     
     /* DMA1 Channel5 enable */
@@ -96,13 +97,13 @@ extern void AudioHard_Init(void)
     GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_NOPULL;//GPIO_PuPd_UP;
     GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-    /* TIMER configuration 设置载波频率为48K 
-    配置每4次改变PWM 1次实现输出频率固定为8K*/
+    /* TIMER configuration sets the carrier frequency to 48 KHz
+       Configures a PWM change every 4 cycles to keep the output frequency fixed at 8 KHz */
     TIM_TimeBaseStructure.TIM_Prescaler = 0;   
     TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;   
     TIM_TimeBaseStructure.TIM_Period = 2000;          
     TIM_TimeBaseStructure.TIM_ClockDivision = 0x0;    
-    TIM_TimeBaseStructure.TIM_RepetitionCounter = 5; //6 固定为8K
+    TIM_TimeBaseStructure.TIM_RepetitionCounter = 5; // 6 fixed at 8 KHz
     TIM_TimeBaseInit(TIM1, &TIM_TimeBaseStructure);
         
     /* Channel 4 Configuration in PWM mode */
@@ -140,7 +141,7 @@ extern void Audio_PlayVoice(U8 Data)
 
     if(g_radioInform.voiceSw == 0) 
     {   
-        //语音关闭
+        // Voice is off
         if(g_radioInform.beepsSwitch == 1)
         {
             BeepOut(BEEP_ERROR);
@@ -153,7 +154,7 @@ extern void Audio_PlayVoice(U8 Data)
     }
     
     if(voice.voiceState)
-    {//打断播报
+    {// Interrupt playback
         Audio_PlayStop();
     }
     
@@ -170,9 +171,7 @@ extern void Audio_PlayNumInQueue(U8 Data)
     
   	if(g_radioInform.voiceSw == 0) 
 	{   
-	    //语音关闭
-	    return;
-	}
+	    // Voice is off
 	
 	Data += vo_0;
 
@@ -195,7 +194,7 @@ extern void Audio_PlayNumInQueue(U8 Data)
 	{
         voice.voiceCnt++;
 	}
-
+	}
 }
 
 extern void Audio_PlayChanNum(U8 Data)	
@@ -290,7 +289,7 @@ extern void Audio_PlayChanNum(U8 Data)
     else
     {
         if( Data < 20 || (i == 0 && j > 0 && k == 0))
-        {//个数为1
+        {// Count is 1
             if( Data <= 10 )
             {
                 voice.voiceBuf[0] = Data + vo_zero;
@@ -307,7 +306,7 @@ extern void Audio_PlayChanNum(U8 Data)
             voice.voiceCnt = 1;
         }
         else if( Data > 100 && (j < 2 || (k == 0 && j > 0)) )
-        {//个数为4
+        {// Count is 4
             if( j < 2 )
             {
         #if vo_and
@@ -354,7 +353,7 @@ extern void Audio_PlayChanNum(U8 Data)
     #endif
         }
         else if( Data > 100 && (j >= 2 && k != 0) )
-        {//个数为5
+        {// Count is 5
     #if vo_and
             voice.voiceBuf[4] = i + vo_zero;
             voice.voiceBuf[3] = vo_hundred;
@@ -374,7 +373,7 @@ extern void Audio_PlayChanNum(U8 Data)
     #endif
         }
         else
-        {//个数为2
+        {// Count is 2
             if( (Data >= 100 && (Data % 100 == 0)))
             {
                 voice.voiceBuf[1] = i + vo_zero;
@@ -488,15 +487,15 @@ extern void Audio_PlayStart(U8 index)
     g_voiceInform.voiceIndex.dataAddr += FLASH_VOICE_BASIC_ADDR;
 
     if(g_voiceInform.voiceIndex.length > 40960 || g_voiceInform.voiceIndex.length == 0x00)
-    {//无音频数据，直接返回
+    {// No audio data; return immediately
         return;
     }
     
-    //语音播报时将收发全部关闭
+    // When voice playback starts, all TX/RX operations are disabled
     Rfic_RxTxOnOffSetup(RFIC_IDLE);
     GPIOA->BSRR = GPIO_Pin_11; 
 
-    //读取音频数据
+    // Read audio data
     g_voiceInform.voicePlay.lastPackage = 0;
     SpiFlash_ReadBytes(g_voiceInform.voiceIndex.dataAddr,dacBuf,512);
     g_voiceInform.voicePlay.logicAddr = g_voiceInform.voiceIndex.dataAddr + 512;
@@ -524,18 +523,19 @@ extern void Audio_PlayStart(U8 index)
     g_voiceInform.voicePlay.usedLen = 0;
 
      /*DMA 允许数据传输完成中断*/
+    /* ^^^ ENGLISH TRANSLATION: DMA allow data transfer complete interrupt ****/
     DMA_ITConfig(DMA1_Channel5,DMA_IT_TC,ENABLE);
     DMA_ClearFlag(DMA1_FLAG_GL5);    
 
-    //启动语音播报
+    // Start voice playback
     DmaUpdateMemery(DMA1_Channel5,(uint32_t)g_voiceInform.voicePlay.dmaBufA,1024);
 
     TIM_CtrlPWMOutputs(TIM1, ENABLE);      
     voice.busyFlag = 1;
     
-    //延时消除开启的破音
+    // Delay to eliminate the click caused by startup
     DelayMs(30);
-    //开启喇叭
+    // Turn on the speaker
     SpeakerSwitch(ON);
 
     g_sysRunPara.rfTxFlag.voxDetDly = 10;
@@ -578,7 +578,7 @@ extern void Audio_PlayStop(void)
 
     DMA_Cmd(DMA1_Channel5, DISABLE);     
     TIM_CtrlPWMOutputs(TIM1, DISABLE); 
-    //清除中断标志
+    // Clear the interrupt flag
     DMA_ITConfig(DMA1_Channel5,DMA_IT_TC,DISABLE);
     DMA_ClearFlag(DMA1_FLAG_GL5); 
     
@@ -601,11 +601,11 @@ extern void Audio_PlayTask(void)
         {
             if(voice.voiceCnt == 0)
             {
-                //语音播报结束
+                // Voice playback finished
                 voice.voiceState = 0;
                 g_sysRunPara.rfTxFlag.voxDetDly = 8;
     
-                //关闭喇叭
+                // Turn off the speaker
                 SpeakerSwitch(OFF);
                 DelayMs(30);
 

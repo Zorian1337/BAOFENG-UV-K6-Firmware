@@ -93,7 +93,7 @@ extern void ScanStart(void)
     DualStandbyWorkOFF();
     
     if(g_ChannelVfoInfo.chVfoInfo[g_ChannelVfoInfo.switchAB].chVfoMode == CHAN_MODE)
-    {//信道模式下，没有信道开启扫描直接返回
+    {// In channel mode, if no channel is enabled for scanning, return immediately
          if(g_ChannelVfoInfo.haveScan == 0)
          {
              BeepOut(BEEP_ERROR);
@@ -101,9 +101,9 @@ extern void ScanStart(void)
          }
     }
     else
-    {//带扫描范围设置功能的，未设置不让进入扫描
+    {// For functions with scan-range settings, scanning is not allowed if not configured
         if(g_radioInform.vfoScanRangeL == g_radioInform.vfoScanRangeH || CheckInputScanRange(g_radioInform.vfoScanRangeL*10,g_radioInform.vfoScanRangeH*10) == FERROR)
-        {//频率范围错误不让进入扫描功能
+        {// Frequency range error prevents entering scan mode
             BeepOut(BEEP_ERROR);
             return;
         }
@@ -119,7 +119,7 @@ extern void ScanStart(void)
 
     VoiceBroadcastWithBeepLock(vo_scanbegin,BEEP_FMSW1);
 
-    //强制进入扫描频点
+    // Force entry into the scan frequency
     ScanNextChannel();
 }
 
@@ -140,7 +140,7 @@ extern void ScanTask(void)
     static U8 sqCnt = 0;
 
     if(g_sysRunPara.sysRunMode != MODE_SCAN)
-    {//不在扫描模式直接返回
+    {// Not in scan mode, return immediately
         return;
     }
     
@@ -174,7 +174,7 @@ extern void ScanTask(void)
                 }
                 return;
             }
-            //扫描下一个信道
+            //扫描下一个信道  ^^^ ENGLISH TRANSLATION: Scan the next channel ***
             ScanNextChannel();
             sqCnt = 0;
             
@@ -187,7 +187,7 @@ extern void ScanTask(void)
                     g_scanInfo.scanTime = 50;
                 }
             }
-            //扫描下一个信道
+            //扫描下一个信道  ^^^ ENGLISH TRANSLATION: Scan the next channel ***
             ScanNextChannel();
             sqCnt = 0;
             
@@ -206,7 +206,7 @@ extern void ScanTask(void)
             }
             break;
         case WAIT_RECALL:
-            //扫描下一个信道
+            //扫描下一个信道  ^^^ ENGLISH TRANSLATION: Scan the next channel ***
             ScanNextChannel();
             sqCnt = 0;
             

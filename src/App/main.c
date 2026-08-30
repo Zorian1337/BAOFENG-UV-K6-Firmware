@@ -40,7 +40,7 @@ int main(void)
     ResetTimeKeyLockAndPowerSave();
     ResetInputBuf();
 
-    //初始化写频模式
+    // Initialize write-frequency mode
     ProgromInit();
     LCD_BackLightSetOn();
 
@@ -53,7 +53,7 @@ int main(void)
     
     while(1)
     {
-        //10ms运行一次
+        // Run every 10ms
         if(g_10msFlag)
         {
             App_10msTask();
@@ -64,7 +64,7 @@ int main(void)
             App_50msTask();
         }
         
-        //100ms运行一次
+        // Run every 100ms
         if(g_100msFlag)
         {
             App_100msTask();

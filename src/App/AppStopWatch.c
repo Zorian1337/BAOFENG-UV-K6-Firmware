@@ -27,7 +27,7 @@ extern void ExitStopWatchMode(void)
     
     g_sysRunPara.sysRunMode = MODE_MAIN;    
    
-    //切换为显示主界面
+    //切换为显示主界面  ^^^ ENGLISH TRANSLATION: Switch to display main screen ***
     DisplayHomePage();
 }
 

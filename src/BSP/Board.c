@@ -2,7 +2,7 @@
 
 __IO STR_INTFUN UserVectors[10] __attribute__((at(0x20001000))) __attribute__((section(".intfun")));
 
-//定时1ms
+// 1 ms timer
 void SysTick_Init(void)
 {
     if (SysTick_Config(SystemCoreClock / 1000))
@@ -20,7 +20,7 @@ void Gpio_Init(void)
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA | RCC_AHBPeriph_GPIOB | RCC_AHBPeriph_GPIOC | RCC_AHBPeriph_GPIOF, ENABLE);
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1 | RCC_APB2Periph_SPI1, ENABLE); 
     
-    //初始化GPIO A 输出相关PIN
+    // Initialize GPIO A output-related pins
     // GPIO_InitStructure.GPIO_Pin   = 0X791C;// 0b0111 1001 0001 1100
     GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_8 | GPIO_Pin_11 | GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14;
 
@@ -34,20 +34,20 @@ void Gpio_Init(void)
     GPIO_Init(GPIOA, &GPIO_InitStructure);
     GPIO_Write(GPIOA,0X0104);
 
-    //初始化GPIOA 输入上拉相关PIN
+    // Initialize GPIO A input pull-up pins
     GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_15;
     GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_IN;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_UP;
     GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-    //初始化ADC使用的GPIO
+    // Initialize GPIO used by ADC
     GPIO_InitStructure.GPIO_Pin  = GPIO_Pin_0 | GPIO_Pin_1;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
     GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL; 
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-    //初始化SPI1接口
+    // Initialize SPI1 interface
     GPIO_InitStructure.GPIO_Pin   =  GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
     GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_AF;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
@@ -59,7 +59,7 @@ void Gpio_Init(void)
     GPIO_PinAFConfig(GPIOA, GPIO_PinSource6, GPIO_AF_0);
     GPIO_PinAFConfig(GPIOA, GPIO_PinSource7, GPIO_AF_0);
 
-    //初始化GPIO B 输出相关PIN
+    // Initialize GPIO B output-related pins
     //GPIO_StructInit(&GPIO_InitStructure);
     GPIO_InitStructure.GPIO_Pin   = 0xBFFD; // 0b1011 1111 1111 1101
     // GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_0  | GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5 
@@ -73,7 +73,7 @@ void Gpio_Init(void)
     GPIO_Write(GPIOB,0x1C19);// 0b0001 1100 0001 1001
     // GPIO_Pin_0 | GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_10 | GPIO_Pin_11 | GPIO_Pin_12
     
-    //初始化GPIO B 输入相关PIN
+    // Initialize GPIO B input-related pins
     GPIO_InitStructure.GPIO_Pin   = 0X4002; // 0b0100 0000 0000 0010
     // GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_1 | GPIO_Pin_14;
     GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_IN;
@@ -82,11 +82,11 @@ void Gpio_Init(void)
   
     GPIO_Init(GPIOB, &GPIO_InitStructure);
 
-    //初始化SPI2接口
+    // Initialize SPI2 interface
     GPIO_PinAFConfig(GPIOB, GPIO_PinSource13, GPIO_AF_0);
     GPIO_PinAFConfig(GPIOB, GPIO_PinSource15, GPIO_AF_0);
 
-    //初始化SPI2接口
+    // Initialize SPI2 interface
     GPIO_InitStructure.GPIO_Pin   =  GPIO_Pin_13 | GPIO_Pin_15;
     GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_AF;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
@@ -95,7 +95,7 @@ void Gpio_Init(void)
     GPIO_Init(GPIOB, &GPIO_InitStructure);
 
 
-    //初始化GPIO C 输出相关PIN
+    // Initialize GPIO C output-related pins
     GPIO_StructInit(&GPIO_InitStructure);
     GPIO_InitStructure.GPIO_Pin   =  GPIO_Pin_15; 
     GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_OUT;
@@ -105,14 +105,14 @@ void Gpio_Init(void)
    
     GPIO_Init(GPIOC, &GPIO_InitStructure);
 
-    //初始化GPIOC 输入上拉相关PIN
+    // Initialize GPIO C input pull-up pins
     GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_13 | GPIO_Pin_14;
     GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_IN;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_UP;
     GPIO_Init(GPIOC, &GPIO_InitStructure);
 
-    //初始化GPIO F 输出相关PIN
+    // Initialize GPIO F output-related pins
     GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_7; 
     GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_OUT;
     GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
@@ -122,7 +122,7 @@ void Gpio_Init(void)
     GPIO_Init(GPIOF, &GPIO_InitStructure);
     GPIO_Write(GPIOF, 0X0000);
 
-    //初始化GPIOF 输入上拉相关PIN
+    // Initialize GPIO F input pull-up pins
     GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_6;
     GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_IN;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;

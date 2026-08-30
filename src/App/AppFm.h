@@ -1,24 +1,24 @@
 #ifndef __APPFM_H
     #define __APPFM_H
 
-//定义FM时间参数
-#define FM_FREQSW_TIME    10      //收音机频率切换时间10ms为单位
-#define FM_SEEK_TIMEOUT   1000    //收音机自动搜索超时时间 10S
-#define FM_SEEK_TIME      FM_SEEK_TIMEOUT - 20 //收音机自动搜索超时时间
-#define FM_RETURN_TIME    200     //收音机退出后返回时间
+// Define FM timing parameters
+#define FM_FREQSW_TIME    10      // FM frequency switching time in 10 ms units
+#define FM_SEEK_TIMEOUT   1000    // FM auto-search timeout 10 s
+#define FM_SEEK_TIME      FM_SEEK_TIMEOUT - 20 // FM auto-search timeout
+#define FM_RETURN_TIME    200     // Time to return after exiting FM mode
 
-#define FM_MAX_CH_NUM     30      //定义最大存储信道数量    
+#define FM_MAX_CH_NUM     30      // Define maximum stored channel count
 
-//定义收音机运行状态
+// Define radio operating states
 enum {FM_STOP=0,FM_SLEEP,FM_READY, FM_SEEK, FM_PLAY};              
 typedef struct
 {
-    U8  mode;                 //收音机运行状态
-    U8  band;                 //工作频段 0:76-108  1:65-76 
-    U16 freq;                 //收音机当前频率
-    U16 timeOut;              //超时时间，用于搜索，退出后返回
-    U8  fmChList[4];          //收音机有效信道列表
-    U8  fmChActive;           //收音机信道模式是否有效
+    U8  mode;                 // FM operating state
+    U8  band;                 // Operating band 0:76-108  1:65-76
+    U16 freq;                 // Current FM frequency
+    U16 timeOut;              // Timeout used for search and return after exit
+    U8  fmChList[4];          // Valid FM channel list
+    U8  fmChActive;           // Whether FM channel mode is valid
 }STR_FMSTATE;
 
 extern STR_FMSTATE    fmInfo;

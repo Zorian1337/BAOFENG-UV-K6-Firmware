@@ -42,7 +42,7 @@ extern void DualStandbyTask(void)
 {
     
     if(dualStandby.dualOnFlag == OFF || dualStandby.dualRxTime)
-    {//双守模式未开启
+    {// Dual standby mode is not enabled
         return;
     }
     if(DtmfGetMatchStatue())
@@ -58,7 +58,7 @@ extern void DualStandbyTask(void)
     }
 
     if(CheckPowerBusy() == ON)
-    {//正在省电中
+    {// Currently in power-save mode
         return;
     }
     if(dualStandby.dualRxFlag == ON)

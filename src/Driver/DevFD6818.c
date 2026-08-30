@@ -1,6 +1,7 @@
 #include  "includes.h"
 
 #define   IIC      0X00   //使用SPI接口
+/* ^^^ ENGLISH TRANSLATION: Use SPI interface ***
   
 /*----------------------------------------------------------------------*/
 #define  Rfic_delay(x)  DelayUs(x)
@@ -44,7 +45,7 @@
 static  U16  UINT_BUFF;
 
 static  U16  PREDCS_CODE;            // DCS [000-777]
-static  U32  DCS_DATA;               // 二进制数据流 
+static  U32  DCS_DATA;               // 二进制数据流
 static  U8   ctsDcsCodeType;
 
 static U8  RF_Baseband_Mode = ModeFM;        // Rfic工作模式
@@ -240,7 +241,8 @@ void  CTCSS_WithRfic(U32 CTS_Data, U8  sw_fhss)
         Rfic_WriteWord(0x51, mask|(temp&0x7f)); //0x80c0 [15]ctcss/dcs en,[13]pos/neg dcs,[12]ctcss/dcs mode,[11]24/23bit,
                             //[6:5]ctcss/dcs coarse tuning gain,[4:0]ctcss/dcs fine tuning gain
                             //Gain = ((32+subau_gain[4:0])<<subau_gain[6:5])/512
-        Rfic_WriteWord(0x07,0x0ad7); //134.4Hz, CDCSS的波特率                         
+        Rfic_WriteWord(0x07,0x0ad7); //134.4Hz, CDCSS的波特率
+        // ^^^ ENGLISH TRANSLATION: 134.4Hz, CDCSS baud rate ***                         
         
         Rfic_WriteWord(0x08,DCS_DATA&0x000fff); //set low 12 bit
         Rfic_WriteWord(0x08,((DCS_DATA&0xfff000) >> 12) | 0x8000); //set high 12 bit
@@ -258,7 +260,9 @@ void  CTCSS_WithRfic(U32 CTS_Data, U8  sw_fhss)
         Rfic_WriteWord(0x07,CTS_BUFF);
     
         Rfic_WriteWord(0x07,0X01CD| (0x1<<13));//55.1Hz 尾音消除序号为第二个
-        Rfic_WriteWord(0x52,0x0292); // 设置模拟亚音门限值  CTS_TH_IN[11:6]  CTS_TH_OUT[5:0]  
+        // ^^^ ENGLISH TRANSLATION: 55.1Hz tail tone elimination sequence number is the second ***
+        Rfic_WriteWord(0x52,0x0292); // 设置模拟亚音门限值  CTS_TH_IN[11:6]  CTS_TH_OUT[5:0]
+        // ^^^ ENGLISH TRANSLATION: Set analog sub-audio threshold value CTS_TH_IN[11:6]  CTS_TH_OUT[5:0] ***  
     }
 }
 
@@ -404,6 +408,7 @@ void  CTS_DCS_SEND_Initial(void)
         {
             if((g_CurrentVfo->tx->dcsCtsNum & 0xA0000000) == 0XA0000000)
             {//学习跳频
+            // ^^^ ENGLISH TRANSLATION: Learn frequency hopping ***
                 DCS_DATA = g_CurrentVfo->tx->dcsCtsNum & 0x007FFFFF;
                 DTCSS_WithRfic(g_CurrentVfo->tx->dcsCtsNum, 1);
             }
@@ -572,7 +577,9 @@ void Rfic_SetScramble(U8 group,U32 freq)
 #define SUB2  6
 #define SUB3  7
 void RF_SetAfResponse(U8 tx, U8 f3k, U8 db) //参数：发射or接收，3k频响or 300hz频响，调整-1~+4dB
+// ^^^ ENGLISH TRANSLATION: Parameters: TX or RX, 3k frequency response or 300hz frequency response, adjust -1~+4dB
 { //v3版本芯片必须修改！！！
+// ^^^ ENGLISH TRANSLATION: v3 version chip must be modified! ***
 
     U16 d1 = 0;
 	U16 d2 = 0;

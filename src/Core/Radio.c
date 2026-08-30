@@ -1,7 +1,7 @@
 #include "includes.h"
 
 const U16 stepList[9] = {250,500,625,1000,1250,2000,2500,5000,10000};
-//定义频率修正补偿值
+// Define frequency correction compensation value
 const U8 MOD_LIST[10] = {0,25,50,75,100,0,25,50,75,25};
 
 extern void RadioConfig_Init(void)
@@ -58,7 +58,7 @@ Boolean CheckFreqInRange(U32 freq)
     if((tempFreq >= 1080) && (tempFreq < 1360))
     {
         if(g_rfMoudel.amRxEn == 0)
-        {//不允许航空接收
+        {// Aviation receive is not allowed
             return FALSE;
         }
         return TRUE;
@@ -203,7 +203,7 @@ extern void ChannelCheckActiveAll(void)
             g_ChannelVfoInfo.channelNum[1] = 0;
         }
 
-        //检查信道是否有效
+        // Check whether the channel is valid
         if( CheckChannelActive(g_ChannelVfoInfo.channelNum[0], 0) == CHAN_DISABLE )
         {
             g_ChannelVfoInfo.channelNum[0] = SeekActiveChannel_Up(g_ChannelVfoInfo.channelNum[0], 0);
@@ -221,7 +221,7 @@ void ChannelNumChangeRead(U8  isScan,U8  isTypeIn)
     g_ChannelVfoInfo.channelNum[g_ChannelVfoInfo.switchAB] = g_ChannelVfoInfo.currentChannelNum;
 
     if(isTypeIn)
-    {//复位输入的buf
+    {// Reset the input buffer
         ResetInputBuf();
     }
 
@@ -244,6 +244,7 @@ extern void ChannelUp(U8  isScan, U8  brocast)
     
     if(g_ChannelVfoInfo.currentChannelNum == 0xFFFF)
     {//没有信道时默认退出信道模式
+    // ^^^ ENGLISH TRANSLATION: When there is no channel, default exit channel mode ***
         g_ChannelVfoInfo.haveChannel =  0;
         return;
     }
@@ -258,6 +259,7 @@ extern void ChannelDown(U8  isScan, U8  brocast)
 
     if(g_ChannelVfoInfo.currentChannelNum == 0xFFFF)
     {//没有信道时默认退出信道模式
+    // ^^^ ENGLISH TRANSLATION: When there is no channel, default exit channel mode ***
         g_ChannelVfoInfo.haveChannel =  0;
         return;
     }
@@ -273,7 +275,7 @@ extern void ChannelNumTypeIn(STR_INPUTBOX *input)
 
     DisplayInputChNum();
 
-    //播报数字
+    // Announce the digit
     temp = input->buf[input->len-1] - 0x30;
     if(g_radioInform.voiceSw == 0)
 	{
@@ -314,7 +316,7 @@ extern void VfoFrequency2Buf(U32 freq,U8  *dest,U8  len)
     sprintf(buf,"%06d",freq);
 
     for(i=0;i<len;i++)
-    {//将ASC转换为hex
+    {// Convert ASCII to hex
         dest[i] = buf[i] - 0x30;
     }
 }
@@ -378,6 +380,7 @@ extern void VfoFreqUp(U8  isScan)
     U32 lastFreq;
 
     //切换频率时需要先关闭倒频，才能切换会主状态
+    // ^^^ ENGLISH TRANSLATION: When switching frequency, need to turn off reverse frequency first, then can switch to main state ***
     Radio_ReverseOff();
 
     lastFreq = g_ChannelVfoInfo.chVfoInfo[g_ChannelVfoInfo.switchAB].freqRx.frequency / 10000;
@@ -398,13 +401,14 @@ extern void VfoFreqUp(U8  isScan)
         if(g_rfMoudel.amRxEn == 1 && lastFreq < 1360)
         {
             if(tempFreq >= 1360)
-            {//AM模式
+            {// AM mode
                 g_ChannelVfoInfo.chVfoInfo[g_ChannelVfoInfo.switchAB].freqRx.frequency = 10800000;
             }
         }
         else
         {
             //获取当前工作频段
+            // ^^^ ENGLISH TRANSLATION: Get current working frequency band ***
             workBand = GetCurWorkBand(lastFreq);
     
             if(tempFreq >= bandRang.bandbuf.freq[workBand*2+1]) 
@@ -415,12 +419,14 @@ extern void VfoFreqUp(U8  isScan)
     }
 
     //计算发射频率
+    // ^^^ ENGLISH TRANSLATION: Calculate TX frequency ***
     CalculateVfoTxFreq();
 
     VfoFreqSave();
     RxReset();
     
     //显示当前频率信息
+    // ^^^ ENGLISH TRANSLATION: Display current frequency information ***
     DisplayRadioHome();
 
     DtmfClrMatchTimer();
@@ -433,6 +439,7 @@ extern void VfoFreqDown(U8  isScan)
     U8  workBand;
 
     //切换频率时需要先关闭倒频，才能切换会主状态
+    // ^^^ ENGLISH TRANSLATION: When switching frequency, need to turn off reverse frequency first, then can switch to main state ***
     Radio_ReverseOff();
 
     lastFreq = g_ChannelVfoInfo.chVfoInfo[g_ChannelVfoInfo.switchAB].freqRx.frequency / 10000;
@@ -452,13 +459,14 @@ extern void VfoFreqDown(U8  isScan)
         if((g_rfMoudel.amRxEn == 1) && (lastFreq < 1080 && lastFreq >= 1360))
         {
             if(tempFreq < 10800000)
-            {//AM模式
+            {// AM mode
                 g_ChannelVfoInfo.chVfoInfo[g_ChannelVfoInfo.switchAB].freqRx.frequency = 13600000 - stepList[g_ChannelVfoInfo.chVfoInfo[g_ChannelVfoInfo.switchAB].freqStep];
             }
         }
         else
         {
             //获取当前工作频段
+            // ^^^ ENGLISH TRANSLATION: Get current working frequency band ***
             workBand = GetCurWorkBand(lastFreq);
     
             if(tempFreq < bandRang.bandbuf.freq[workBand*2]) 
@@ -469,12 +477,14 @@ extern void VfoFreqDown(U8  isScan)
     }
 
     //计算发射频率
+    // ^^^ ENGLISH TRANSLATION: Calculate TX frequency ***
     CalculateVfoTxFreq();
     
     VfoFreqSave();
     RxReset(); 
     
     //显示当前频率信息
+    // ^^^ ENGLISH TRANSLATION: Display current frequency information ***
     DisplayRadioHome();
 
     DtmfClrMatchTimer();
@@ -498,10 +508,10 @@ extern void VfoFreqTypeIn(STR_INPUTBOX *input)
         }
     }
 
-    //显示输入模式
+    // Display input mode
     DisplayInputVfoFreq();
 
-    //播报数字
+    // Announce the number
     temp = input->buf[input->len-1] - 0x30;
 
     if(g_radioInform.voiceSw == 0)
@@ -515,7 +525,7 @@ extern void VfoFreqTypeIn(STR_INPUTBOX *input)
 
     if(input->len == 6)
     {
-        //双守开启时需要关闭，才能切换回主信道
+        // When dual standby is enabled, it must be turned off before switching back to the main channel
         DualStandbyWorkOFF();
         
         input->buf[input->len] = 0;
@@ -543,7 +553,7 @@ extern void VfoFreqTypeIn(STR_INPUTBOX *input)
         if(CheckFreqInRange(tempFreq))
         {
             g_ChannelVfoInfo.chVfoInfo[g_ChannelVfoInfo.switchAB].freqRx.frequency = tempFreq;
-            //计算发射频率
+            // Calculate the transmit frequency
             CalculateVfoTxFreq();
 
             VfoFreqSave();
@@ -554,7 +564,7 @@ extern void VfoFreqTypeIn(STR_INPUTBOX *input)
         }
         RxReset();
 
-        //更新显示信息
+        // Update display information
         DisplayRadioHome();
 
         DtmfClrMatchTimer();
@@ -696,7 +706,7 @@ U32 VfoOffsetCalculate(U8 *buf)
     return freq *10;
 }
 
-//初始化信道数据
+// Initialize channel data
 extern void ChannleVfoDataInit(U8 flagAB,U8 readFlag)
 {
     U16 chNum;

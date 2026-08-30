@@ -3,7 +3,7 @@
 
 enum{ CALLTYPE_NONE, CALLTYPE_NID, CALLTYPE_ID, CALLTYPE_GROUP, CALLTYPE_ALL };
     
-#define DTMF_ANI_LEN       3      //定义本机ID长度
+#define DTMF_ANI_LEN       3      // Define local ID length
     
 typedef struct 
 {
@@ -13,20 +13,20 @@ typedef struct
 
 typedef struct
 {
-    U8  machineId[5];//本机设备ID
-    U8  dtmfAlarmWord;         //报警码
-    U8  dtmfFlag;              //BIT1:  PTT松开发送本机ID
-                                  //BIT0:  PTT按下发送本机ID
-    U8  onTime;                //DTMF码持续时间  范围：80-2000MS （步进为10MS）,取值:0 1 2 3 .... 195 默认：0
-    U8  offTime;               //DTMF码间断时间  范围：80-2000MS （步进为10MS）,取值:0 1 2 3 .... 195 默认：0
-    U8  separator;            // 分隔符
-    U8  groupCall;            // 组呼符
+    U8  machineId[5];// Local device ID
+    U8  dtmfAlarmWord;         // Alarm code
+    U8  dtmfFlag;              // BIT1: send local ID when PTT is released
+                                  // BIT0: send local ID when PTT is pressed
+    U8  onTime;                // DTMF code duration  Range: 80-2000 ms (step 10 ms), value: 0 1 2 3 .... 195 default: 0
+    U8  offTime;               // DTMF code gap  Range: 80-2000 ms (step 10 ms), value: 0 1 2 3 .... 195 default: 0
+    U8  separator;            // Separator
+    U8  groupCall;            // Group call symbol
 }__attribute__( ( packed ) )STF_DTMFSTORE;
 
-//发码模式
+// Transmit mode
 enum{DTMF_ONLINE=1,DTMF_OFFLINE=2,DTMF_ALARMCODE=4,DTMF_ALARMID,DTMF_TYPEIN,DTMF_ANI=8};
 
-//DTMF工作状态
+// DTMF operating state
 enum {DTMF_OVER = 0,DTMF_SETUP,DTMF_FREQ,DTMF_STOP};
 typedef struct
 {
@@ -36,31 +36,31 @@ typedef struct
 
 typedef struct
 {
-    U8  code[16];              //DTMF发送的编码
-    U8  cntRxDtmf;             //DTMF解码数量
-    U8  state;                 //工作状态
-    U8  enCodeNum;             //当前发码序号
-    U8  enCode;                //当前需要发送的编码
-    U8  sendFlag;              //正在发码标志
-    U16 timeOut;               //DTMF发码时间或者发码等待时间
-    U16 detTime;               //DTMF检测时间
-    U8  timeRxOut;             //接收解码超时时间
-    String aniCode[8];            //呼叫方号码
-    String callCode[8];           //呼叫信息
-    U8  callType;              //呼叫类型   个呼\带身份个呼\组呼\群呼
-    U8  matchTime[2];          //匹配持续时间
-    U8  flagAck;               //身份识别回传标志
-    U8  timerDlyTxEnd;         //发码结束延时时间
+    U8  code[16];              // DTMF transmitted code
+    U8  cntRxDtmf;             // Number of DTMF codes decoded
+    U8  state;                 // Operating state
+    U8  enCodeNum;             // Current transmit sequence number
+    U8  enCode;                // Current code to send
+    U8  sendFlag;              // Transmit-in-progress flag
+    U16 timeOut;               // DTMF transmit time or transmit wait time
+    U16 detTime;               // DTMF detection time
+    U8  timeRxOut;             // Receive decode timeout
+    String aniCode[8];            // Caller number
+    String callCode[8];           // Call information
+    U8  callType;              // Call type   individual call / caller ID call / group call / all-call
+    U8  matchTime[2];          // Matching duration
+    U8  flagAck;               // Identity acknowledgment flag
+    U8  timerDlyTxEnd;         // DTMF transmit-end delay
 
-    U8  timerDtmfGroupRst;     //DTMF呼叫复位时间   30s内不需要再次检测
-    U8  flagDtmfMatch;         //DTMF呼叫检测标志
+    U8  timerDtmfGroupRst;     // DTMF call reset time   No need to detect again within 30 s
+    U8  flagDtmfMatch;         // DTMF call detection flag
 
     STR_CONTACT contact[20];
 
-    U8  onlineCode[16];      // 上线码  
-    U8  offlineCode[16];     // 下线码
-    U8  killCode[16];         // 遥毙码
-    U8  reliveCode[16];       // 唤醒码
+    U8  onlineCode[16];      // Online code
+    U8  offlineCode[16];     // Offline code
+    U8  killCode[16];         // Kill code
+    U8  reliveCode[16];       // Wake code
 
 }STR_DTMFINFO;
 

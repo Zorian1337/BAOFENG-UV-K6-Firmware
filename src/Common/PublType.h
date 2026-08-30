@@ -13,7 +13,7 @@ typedef uint16_t            U16;
 typedef uint32_t            U32;   
 typedef uint64_t            U64;        
 
-typedef int_fast8_t         Boolean;         // 至少为1bit
+typedef int_fast8_t         Boolean;         // At least 1 bit
 
 
 #define __BYTE              uint8_t

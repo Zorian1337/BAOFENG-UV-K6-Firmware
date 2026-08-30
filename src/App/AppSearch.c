@@ -7,7 +7,7 @@ extern void EnterSearchFreqMode(void)
 {
     Menu_ExitMode();
 
-    //关闭双守功能
+    // Disable dual standby function
     DualStandbyWorkOFF();
 
     SpeakerSwitch(OFF);
@@ -25,7 +25,7 @@ extern void EnterSearchFreqMode(void)
     
     Rfic_SwitchFM_AM(ModeFM);
 
-    RF_PowerSet( FREQ_BAND_UHF, PWR_RXON );//关闭所有电源
+    RF_PowerSet( FREQ_BAND_UHF, PWR_RXON );// Turn off all power
     SearchFreqDisplayHome();
 }
 
@@ -74,7 +74,7 @@ extern void ExitSearchFreqMode(U8  disHome)
 
     Rfic_FreqScan_Disable();
 
-    //切换为显示主界面
+    // Switch back to the main display
     if(disHome)
     {
         searchSaveFlag = 0;
@@ -149,7 +149,7 @@ extern void SearchFreqTask(void)
     U32 tempFreq;
 
     if(g_sysRunPara.sysRunMode != MODE_SEARCH)
-    {//不在扫频模式直接返回
+    {// Not in frequency-scan mode; return immediately
         return;
     }
 
@@ -285,10 +285,10 @@ extern void SearchFreqTask(void)
         case SF_Check:
             if(XTAL_ADJUST > 16)
             {
-                XTAL_ADJUST = 8; // 零点
+                XTAL_ADJUST = 8; // 零点  ^^^ TRANSLATION: Zero point (26MHz crystal calibration baseline) ***
             }
             tempFreq = searchFreqImofs.freq * xtal26MAdjust[XTAL_ADJUST] / 10000000L;
-            if(XTAL_ADJUST > 8)// 8为0点的索引
+            if(XTAL_ADJUST > 8)// 8为0点的索引  ^^^ TRANSLATION: 8 is the index for the zero point ***
             {
                 searchFreqImofs.freq -= tempFreq;
             }
@@ -296,9 +296,9 @@ extern void SearchFreqTask(void)
             {
                 searchFreqImofs.freq += tempFreq;
             }
-            //按250Hz取整
+            // Round to 250 Hz increments
             searchFreqImofs.freq = (searchFreqImofs.freq + 13) / 25 * 25;
-            //限制频率超过范围问题
+            // Keep the frequency within the valid range
             switch(searchFreqImofs.band)
             {
                 case FREQ_BAND_VHF:
@@ -437,7 +437,7 @@ extern void SearchFreqTask(void)
                 searchFreqImofs.overTime--;
             }
             else
-            {// 超时
+            {// Timeout
                 SearchFreqModeDisplayDCSData(SUBAUDIO_NONE, 0, 0);
 
                 searchFreqImofs.CtsResult = 0;
@@ -450,7 +450,7 @@ extern void SearchFreqTask(void)
         case SCtsDcs_Issue:
             if(Rfic_GetSQLinkState() == TRUE)
             {
-                //增加判断亚音频
+                // Add sub-audio detection
                 if(searchFreqImofs.dcsCtsType > SUBAUDIO_NONE)
                 {
                     if(Rfic_SubaudioDetect() == 0)
@@ -484,7 +484,7 @@ extern void SearchFreqTask(void)
             break;
 
         default:
-            //退出扫频模式
+            // Exit scan mode
             ExitSearchFreqMode(1);
             break;
     }

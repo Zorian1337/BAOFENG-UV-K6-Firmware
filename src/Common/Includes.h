@@ -42,6 +42,10 @@
 #include "AppStopWatch.h"
 #include "AppTask.h"
 #include "AppWeather.h"
+
+// CUSTOM APP
+#include "Custom/AppSignalDetector.h" // ADDED TO FIX U8 NOT BEING A REGISTERED TYPE
+
 #include "Battery.h"
 #include "DualStandby.h"
 #include "DisplayMain.h"
